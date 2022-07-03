@@ -4,7 +4,7 @@ namespace Ranges;
 [System.Diagnostics.DebuggerDisplay("<Start: {Start}, End: {End}, Mode: {_mode}>")]
 public struct Range<T> : IRange<T> where T : struct, IComparable<T>
 {
-    // Private because we don't want it to
+    // Didn't add it as a property as it will be included when serialized.
     private RangeMode _mode;
 
     public T Start { get; }
@@ -17,11 +17,13 @@ public struct Range<T> : IRange<T> where T : struct, IComparable<T>
         // I'd want to do it at the constructor level, but the consumer might want to have the original range for debug.
         var (start, end) = GetMode() switch { RangeMode.Reversed => (End, Start), _ => (Start, End) };
 
+        var startValue = value.CompareTo(start);
+        var endValue = value.CompareTo(end);
         return comparer switch {
-            RangeComparison.AllInclusive => value.CompareTo(start) >= 0 && value.CompareTo(end) <= 0,
-            RangeComparison.AllExclusive => value.CompareTo(start) > 0 && value.CompareTo(end) < 0,
-            RangeComparison.ExcludeStart => value.CompareTo(start) > 0 && value.CompareTo(end) <= 0,
-            RangeComparison.ExcludeEnd   => value.CompareTo(start) >= 0 && value.CompareTo(end) < 0,
+            RangeComparison.AllInclusive => startValue >= 0 && endValue <= 0,
+            RangeComparison.AllExclusive => startValue > 0 && endValue < 0,
+            RangeComparison.ExcludeStart => startValue > 0 && endValue <= 0,
+            RangeComparison.ExcludeEnd   => startValue >= 0 && endValue < 0,
             _ => throw new InvalidOperationException($"RangeComparison value is invalid: '{comparer}'.")
         };
     }
