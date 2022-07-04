@@ -22,6 +22,6 @@ Cool thing about this is that you can use it with anything that implement `IComp
 ## Things to do
 
 - [x] `IRange<T>`/`Range<T>`: Simple range with inclusive/exclusive value comparers.
-- [ ] `ISkippableRange<T>`/`SkippableRange<T>`: Range that implements a set of values that must be ignored on the range.
+- [x] Range value exclusions.
 - [ ] Any other type of range you'd like?
 - [ ] Extension methods.

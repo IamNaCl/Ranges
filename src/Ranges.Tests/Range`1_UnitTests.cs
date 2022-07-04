@@ -229,4 +229,20 @@ public class Range_T_UnitTests
         var range = new Range<int>(1, 10);
         Assert.ThrowsException<InvalidOperationException>(() => range.Contains(4, (RangeComparison)(-1)));
     }
+
+    [TestMethod]
+    public void Test_Range_ContainsWithExclusions_IsWithinRange()
+    {
+        int testValue = 4;
+        var range = new Range<int>(1, 10);
+        Assert.IsTrue(range.Contains(testValue, new int[] { testValue + 1, testValue + 2 }));
+    }
+
+    [TestMethod]
+    public void Test_Range_ContainsWithExclusions_IsOutOfRange()
+    {
+        int testValue = 2;
+        var range = new Range<int>(1, 10);
+        Assert.IsFalse(range.Contains(testValue, new int[] { testValue }));
+    }
 }
