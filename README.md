@@ -23,5 +23,6 @@ Cool thing about this is that you can use it with anything that implement `IComp
 
 - [x] `IRange<T>`/`Range<T>`: Simple range with inclusive/exclusive value comparers.
 - [x] Range value exclusions.
+- [x] `ISteppedRange<T>`/`SteppedRange<T>`: Range with step values.
 - [ ] Any other type of range you'd like?
 - [ ] Extension methods.
