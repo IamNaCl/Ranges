@@ -6,7 +6,9 @@ Feedback is always welcome.
 
 ## How it works?
 
-For `IRange<T>`/`Range<T>`, it is really simple:
+Below are a few examples on how to use the different Range types.
+
+### `IRange<T>`/`Range<T>`
 
 ```cs
 using Ranges;
@@ -14,10 +16,24 @@ using Ranges;
 int number = 5;
 var range = new Range<int>(1, 10);
 
+// Outputs: "Is 5 within range? yes!"
 Console.WriteLine($"Is '{number}' within range? {(range.Contains(number)? "yes!": "no...")}");
 ```
 
-Cool thing about this is that you can use it with anything that implement `IComparable<T>`.
+### `ISteppedRange<T>`/`SteppedRange<T>`
+
+```cs
+using Ranges;
+int number = 3;
+var range = new SteppedRange<int>(0, 10, prev => prev + 2);
+
+// Outputs: "Is 3 within range? no..."
+Console.WriteLine($"Is '{number}' within range? {(range.Contains(number)? "yes!": "no...")}");
+// Outputs: The range: [ 0, 2, 4, 6, 8, 10 ]
+Console.WriteLine($"The range: [ {string.Join(", ", range)} ]");
+```
+
+Cool thing about this is that you can use the ranges with anything that implement `IComparable<T>`.
 
 ## Things to do
 
