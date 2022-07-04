@@ -11,11 +11,27 @@ public struct Range<T> : IRange<T> where T : struct, IComparable<T>
 
     public T End { get; }
 
-    public bool Contains(T value, RangeComparison comparer = RangeComparison.AllInclusive)
+    #region Contains
+    /// <summary>
+    /// Checks whether the given <paramref name="value"/> is contained within the current instance of
+    /// <see cref="IRange{T}"/>.
+    /// </summary>
+    /// <param name="mode">Mode of the range.</param>
+    /// <param name="start">Start value of the range.</param>
+    /// <param name="end">End value of the range.</param>
+    /// <param name="value">
+    /// Value to be compared against the start and end values defined in this instance of <see cref="IRange{T}"/>.
+    /// </param>
+    /// <param name="comparer">
+    /// Range comparer to be used when checking if <paramref name="value"/> is defined within this instance of
+    /// <see cref="IRange{T}"/>, please check <see cref="RangeComparison"/> for more information.
+    /// </param>
+    /// <returns>True if the <paramref name="value"/> exists within the given range.</returns>
+    internal static bool Contains(RangeMode mode, T start, T end, T value, RangeComparison comparer)
     {
         // Check the <remarks> section in the documentation comment for this.
         // I'd want to do it at the constructor level, but the consumer might want to have the original range for debug.
-        var (start, end) = GetMode() switch { RangeMode.Reversed => (End, Start), _ => (Start, End) };
+        (start, end) = mode switch { RangeMode.Reversed => (end, start), _ => (start, end) };
 
         var startValue = value.CompareTo(start);
         var endValue = value.CompareTo(end);
@@ -27,6 +43,10 @@ public struct Range<T> : IRange<T> where T : struct, IComparable<T>
             _ => throw new InvalidOperationException($"RangeComparison value is invalid: '{comparer}'.")
         };
     }
+
+    public bool Contains(T value, RangeComparison comparer = RangeComparison.AllInclusive) =>
+        Contains(GetMode(), Start, End, value, comparer);
+    #endregion
 
     #region GetMode
     public RangeMode GetMode() => _mode;
